@@ -21,6 +21,36 @@
 #include <stdint.h>
 #include "application.h"
 
+/*=========================================================================
+    SSD1306 Displays
+    -----------------------------------------------------------------------
+    The driver is used in multiple displays (64x48, 128x64).
+    Select the appropriate display below to create an appropriately
+    sized framebuffer, etc.
+    SSD1306_64_48    64x48 pixel display
+	SSD1306_128_64  128x64 pixel display
+    -----------------------------------------------------------------------*/
+   //#define SSD1306_64_48
+   #define SSD1306_128_64
+/*=========================================================================*/
+
+#if defined SSD1306_64_48 && defined SSD1306_128_64
+  #error "Only one SSD1306 display can be specified at once in SparkFunMicroOLED.h"
+#endif
+#if !defined SSD1306_64_48 && !defined SSD1306_128_64
+  #error "At least one SSD1306 display must be specified in SparkFunMicroOLED.h"
+#endif
+
+#if defined SSD1306_64_48
+	#define LCDWIDTH			64
+	#define LCDHEIGHT			48
+#endif
+
+#if defined SSD1306_128_64
+	#define LCDWIDTH		   128
+	#define LCDHEIGHT			64
+#endif
+
 #define swap(a, b) { uint8_t t = a; a = b; b = t; }
 #define _BV(x)	(1 << x)
 #define pgm_read_byte(x) (*(x))
@@ -40,8 +70,6 @@
 #define BLACK 0
 #define WHITE 1
 
-#define LCDWIDTH			64
-#define LCDHEIGHT			48
 #define FONTHEADERSIZE		6
 
 #define NORM				0
@@ -154,7 +182,7 @@ public:
 	void drawChar(uint8_t x, uint8_t y, uint8_t c);
 	void drawChar(uint8_t x, uint8_t y, uint8_t c, uint8_t color, uint8_t mode);
 	void drawBitmap(const uint8_t * bitArray);
-	
+
 	uint8_t getLCDWidth(void);
 	uint8_t getLCDHeight(void);
 	void setColor(uint8_t color);
